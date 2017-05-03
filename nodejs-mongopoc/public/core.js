@@ -1,11 +1,12 @@
 var scotchTodo = angular.module('scotchTodo', []);
+var backendUrl = "http://localhost:8081";
 
 scotchTodo.controller('mainController', function($scope, $http) {
 	$scope.formData = {
 		text: 'test'
 	};
 
-	$http.get('/api/todos').success(function(data) {
+	$http.get(backendUrl+'/api/todos').success(function(data) {
 		$scope.todos = data;
 		console.log(data);
 	}).error(function(data) {
@@ -14,7 +15,7 @@ scotchTodo.controller('mainController', function($scope, $http) {
 
 	$scope.createTodo = function() {
 		
-		$http.post('/api/todos', $scope.formData).success(function(data) {
+		$http.post(backendUrl+'/api/todos', $scope.formData).success(function(data) {
 			$scope.formData = {};
 			$scope.todos = data;
 			console.log(data);
@@ -24,7 +25,7 @@ scotchTodo.controller('mainController', function($scope, $http) {
 	}
 
 	$scope.deleteTodo = function(id) {
-		$http.delete('/api/todos/' + id).success(function(data) {
+		$http.delete(backendUrl+'/api/todos/' + id).success(function(data) {
 			$scope.todos = data;
 			console.log(data);
 		}).error(function(data) {
