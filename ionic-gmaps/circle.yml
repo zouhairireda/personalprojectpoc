@@ -1,0 +1,17 @@
+---
+machine:
+  node:
+    version: 0.10.22
+
+test:
+  override:
+    - npm install -g gulp bower
+    - node_modules/.bin/jshint --exclude=www/lib www server.js
+#    - node_modules/karma/bin/karma start --single-run
+#    - node_modules/coveralls/bin/coveralls.js < tests/coverage/PhantomJS*/lcov.info
+
+deployment:
+  production:
+    branch: master
+    heroku:
+      appname: ionic-angular-google-maps
