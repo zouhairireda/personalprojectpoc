@@ -48,3 +48,11 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+engine/
+node_modules/
+platforms/
+plugins/
+www/css
+www/lib
+
