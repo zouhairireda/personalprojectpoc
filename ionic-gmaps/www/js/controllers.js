@@ -93,7 +93,7 @@ angular.module('angularGoogleMapsExample.controllers', ['angularGoogleMapsExampl
       });
     });
 
-    $scope.tap = function() {
+    $scope.tapMinor = function() {
       Yelp.search($scope.position).then(function(data) {
         console.log(data);
         for (var i = 0; i < data.data.businesses.length; i++) {
@@ -102,7 +102,53 @@ angular.module('angularGoogleMapsExample.controllers', ['angularGoogleMapsExampl
             id: i,
             name: business.name,
             url: business.url,
-            icon: "../img/red.png",
+            icon: "../img/minor.gif",
+            location: {
+              latitude: business.location.coordinate.latitude,
+              longitude: business.location.coordinate.longitude
+            }
+          });
+          break;
+        }
+      }, function(error) {
+        console.log("Unable to access yelp");
+        console.log(error);
+      });
+    }
+
+    $scope.tapMajor = function() {
+      Yelp.search($scope.position).then(function(data) {
+        console.log(data);
+        for (var i = 0; i < data.data.businesses.length; i++) {
+          var business = data.data.businesses[i];
+          $scope.markers.push({
+            id: i,
+            name: business.name,
+            url: business.url,
+            icon: "../img/major.png",
+            location: {
+              latitude: business.location.coordinate.latitude,
+              longitude: business.location.coordinate.longitude
+            }
+          });
+          break;
+        }
+      }, function(error) {
+        console.log("Unable to access yelp");
+        console.log(error);
+      });
+    }
+
+    $scope.tapCritical = function() {
+      Yelp.search($scope.position).then(function(data) {
+        console.log(data);
+        for (var i = 0; i < data.data.businesses.length; i++) {
+          var business = data.data.businesses[i];
+          $scope.markers.push({
+            id: i,
+            name: business.name,
+            url: business.url,
+            icon: "../img/critical.gif",
             location: {
               latitude: business.location.coordinate.latitude,
               longitude: business.location.coordinate.longitude
