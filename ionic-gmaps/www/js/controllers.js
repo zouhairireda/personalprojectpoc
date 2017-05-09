@@ -2,7 +2,7 @@
 
 angular.module('angularGoogleMapsExample.controllers', ['angularGoogleMapsExample.services'])
 
-  .controller('MapCtrl', function($scope, $timeout, $cordovaGeolocation, uiGmapGoogleMapApi, Yelp) {
+  .controller('MapCtrl', function($scope, $timeout, $interval, $cordovaGeolocation, uiGmapGoogleMapApi, Yelp) {
 
     $scope.markers = [];
     $scope.infoVisible = false;
@@ -161,6 +161,34 @@ angular.module('angularGoogleMapsExample.controllers', ['angularGoogleMapsExampl
         console.log(error);
       });
     }
+
+  //eventually save some places in database for recovering
+      $interval(function() {
+        uiGmapGoogleMapApi.then(function(maps) {
+          // Don't pass timeout parameter here; that is handled by setTimeout below
+          var posOptions = {enableHighAccuracy: false};
+          $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
+            console.log("Got location: " + JSON.stringify(position));
+            $scope.position = position;
+//            initializeMap(position);
+          }, function(error) {
+            console.log(error);
+            initializeMap();
+          });
+        });
+        $scope.markers.push({
+            id: $scope.position.timestamp,
+            //name: business.name,
+            //url: business.url,
+            icon: "../img/current.ico",
+            location: {
+              latitude: $scope.position.coords.latitude,
+              longitude: $scope.position.coords.longitude
+            }
+        });
+    }, 2000);
+      //when click on blue marker == save in database (with 3 choices)
+ //   }
 
 
 
