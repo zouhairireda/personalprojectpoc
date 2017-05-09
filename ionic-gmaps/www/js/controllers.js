@@ -7,6 +7,7 @@ angular.module('angularGoogleMapsExample.controllers', ['angularGoogleMapsExampl
     $scope.markers = [];
     $scope.infoVisible = false;
     $scope.infoBusiness = {};
+    $scope.position = {};
 
     // Default to downtown Toronto
     var defaultPosition = {
@@ -58,7 +59,7 @@ angular.module('angularGoogleMapsExample.controllers', ['angularGoogleMapsExampl
         }
       };
 
-      Yelp.search(position).then(function(data) {
+      /*Yelp.search(position).then(function(data) {
         console.log(data);
         for (var i = 0; i < data.data.businesses.length; i++) {
           var business = data.data.businesses[i];
@@ -76,7 +77,7 @@ angular.module('angularGoogleMapsExample.controllers', ['angularGoogleMapsExampl
       }, function(error) {
         console.log("Unable to access yelp");
         console.log(error);
-      });
+      });*/
     };
 
     uiGmapGoogleMapApi.then(function(maps) {
@@ -84,12 +85,38 @@ angular.module('angularGoogleMapsExample.controllers', ['angularGoogleMapsExampl
       var posOptions = {enableHighAccuracy: false};
       $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
         console.log("Got location: " + JSON.stringify(position));
+        $scope.position = position;
         initializeMap(position);
       }, function(error) {
         console.log(error);
         initializeMap();
       });
     });
+
+    $scope.tap = function() {
+      Yelp.search($scope.position).then(function(data) {
+        console.log(data);
+        for (var i = 0; i < data.data.businesses.length; i++) {
+          var business = data.data.businesses[i];
+          $scope.markers.push({
+            id: i,
+            name: business.name,
+            url: business.url,
+            icon: "../img/red.png",
+            location: {
+              latitude: business.location.coordinate.latitude,
+              longitude: business.location.coordinate.longitude
+            }
+          });
+          break;
+        }
+      }, function(error) {
+        console.log("Unable to access yelp");
+        console.log(error);
+      });
+    }
+
+
 
     // Deal with case where user does not make a selection
     $timeout(function() {
